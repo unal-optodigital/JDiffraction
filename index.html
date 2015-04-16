@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -16,17 +15,17 @@
 
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/unal-optodigital/JDiffraction">View on GitHub</a>
+      <header class="inner">
+        <a id="forkme_banner" href="https://github.com/unal-optodigital/JDiffraction">View on GitHub</a>
 
-          <h1 id="project_title">JDiffraction</h1>
-          <h2 id="project_tagline">Numerical wave propagation library for Java.</h2>
+        <h1 id="project_title">JDiffraction</h1>
+        <h2 id="project_tagline">Numerical wave propagation library for Java.</h2>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/unal-optodigital/JDiffraction/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/unal-optodigital/JDiffraction/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
+        <section id="downloads">
+          <a class="zip_download_link" href="https://github.com/unal-optodigital/JDiffraction/zipball/master">Download this project as a .zip file</a>
+          <a class="tar_download_link" href="https://github.com/unal-optodigital/JDiffraction/tarball/master">Download this project as a tar.gz file</a>
+        </section>
+      </header>
     </div>
 
     <!-- MAIN CONTENT -->
@@ -34,124 +33,125 @@
       <section id="main_content" class="inner">
         <p>JDiffraction is a numerical wave propagation library for Java. Includes angular spectrum, Fresnel-Fourier and <a href="http://dx.doi.org/10.1364/AO.49.006430" target="_blank">Fresnel-Bluestein</a> methods. Aditionally it includes an utilities class, designed to work with the complex arrays required by the library.</p>
 
-<p>Currently it only supports calculation on CPU, in later versions we expect to add the posibility of calculation on GPGPU using <a href="http://www.jcuda.org/" target="_blank">JCuda</a>.</p>
+        <p>Currently it only supports calculation on CPU, in later versions we expect to add the posibility of calculation on GPGPU using <a href="http://www.jcuda.org/" target="_blank">JCuda</a>.</p>
 
-<p>If you are using JDiffraction and find a bug, please <a href="#contact">contact us</a>.</p>
+        <p>If you are using JDiffraction and find a bug, please <a href="#contact">contact us</a>.</p>
 
-<hr>
+        <hr>
 
-<h3>
-<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h3>
+        <h3>
+          <a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h3>
 
-<p>An example of usage of JDiffraction on a simple <a href="http://imagej.nih.gov/ij/index.html" target="_blank">ImageJ</a>'s plugin. Diffraction of a circular aperture using the angular spectrum method. The parameters are meant to produce an even number of Fresnel zones on the diffraction pattern.
-</p>
+        <p>An example of usage of JDiffraction on a simple <a href="http://imagej.nih.gov/ij/index.html" target="_blank">ImageJ</a>'s plugin. Diffraction of a circular aperture using the angular spectrum method. The parameters are meant to produce an even number of Fresnel zones on the diffraction pattern.
+        </p>
 
-<p align="center">
-<img src="images/example-01.png" style="width:600px">
-</p>
-<p align="center">
-(a) Circular aperture. (b) GenericDialog for parameters. (c) Modulus of the propagated field.
-</p>
+        <p align="center">
+          <img src="images/example-01.png" style="width:600px">
+        </p>
+        <p align="center">
+          (a) Circular aperture. (b) GenericDialog for parameters. (c) Modulus of the propagated field.
+        </p>
 
-<h4>Code:</h4>
+        <h4>Code:</h4>
 
-<pre class="prettyprint">
-import ij.*;
-import ij.gui.GenericDialog;
-import ij.process.*;
-import ij.plugin.filter.*;
-import unal.od.jdiffraction.cpu.FloatAngularSpectrum;
-import unal.od.jdiffraction.cpu.utils.ArrayUtils;
+        <pre class="prettyprint">
+          import ij.*;
+          import ij.gui.GenericDialog;
+          import ij.process.*;
+          import ij.plugin.filter.*;
+          import unal.od.jdiffraction.cpu.FloatAngularSpectrum;
+          import unal.od.jdiffraction.cpu.utils.ArrayUtils;
 
-public class JDiffraction_Example implements PlugInFilter {
+          public class JDiffraction_Example implements PlugInFilter {
 
-    ImagePlus imp;
+            ImagePlus imp;
 
-    @Override
-    public int setup(String arg, ImagePlus imp) {
-        this.imp = imp;
-        return DOES_ALL;
-    }
+            @Override
+            public int setup(String arg, ImagePlus imp) {
+              this.imp = imp;
+              return DOES_ALL;
+            }
 
-    @Override
-    public void run(ImageProcessor ip) {
-        //gets the image data and creates the complex array
-        int M = ip.getWidth();
-        int N = ip.getHeight();
-        
-        float[][] image = ip.getFloatArray();
-        float[][] field = ArrayUtils.complexAmplitude2(image, null);
-        
-        //unlocks the image because it's no longer needed
-        imp.unlock();
-        
-        //Creates a GenericDialog object to ask the user for propagation
-        //parameters
-        GenericDialog gd = new GenericDialog("Parameters");
-        gd.addNumericField("Wavelength", 633E-9, 10, 10, "m");
-        gd.addNumericField("Distance", 1, 2, 10, "m");
-        gd.addNumericField("Input width", 5E-3, 4, 10, "m");
-        gd.addNumericField("Input height", 5E-3, 4, 10, "m");
-        gd.showDialog();
-        
-        if (gd.wasCanceled()){
-            return;
-        }
-        
-        float wavelength = (float) gd.getNextNumber();
-        float distance = (float) gd.getNextNumber();
-        float inputWidth = (float) gd.getNextNumber();
-        float inputHeight = (float) gd.getNextNumber();
-        
-        //Creates the AngularSpectrum object and diffracts the input field
-        FloatAngularSpectrum as = new FloatAngularSpectrum(M, N, wavelength,
-                distance, inputWidth / M, inputHeight / N);
-        as.diffract(field);
-        
-        //Calculates the modulus of the output field and shows it
-        float[][] modulus = ArrayUtils.modulus(field);
-        
-        ImageProcessor ipModulus = new FloatProcessor(modulus);
-        ImagePlus impModulus = new ImagePlus("modulus", ipModulus);
-        impModulus.show();
-    }
-}
-</pre>
+            @Override
+            public void run(ImageProcessor ip) {
+              //gets the image data and creates the complex array
+              int M = ip.getWidth();
+              int N = ip.getHeight();
+              
+              float[][] image = ip.getFloatArray();
+              float[][] field = ArrayUtils.complexAmplitude2(image, null);
+              
+              //unlocks the image because it's no longer needed
+              imp.unlock();
+              
+              //Creates a GenericDialog object to ask the user for propagation
+              //parameters
+              GenericDialog gd = new GenericDialog("Parameters");
+              gd.addNumericField("Wavelength", 633E-9, 10, 10, "m");
+              gd.addNumericField("Distance", 1, 2, 10, "m");
+              gd.addNumericField("Input width", 5E-3, 4, 10, "m");
+              gd.addNumericField("Input height", 5E-3, 4, 10, "m");
+              gd.showDialog();
+              
+              if (gd.wasCanceled()){
+                return;
+              }
+              
+              float wavelength = (float) gd.getNextNumber();
+              float distance = (float) gd.getNextNumber();
+              float inputWidth = (float) gd.getNextNumber();
+              float inputHeight = (float) gd.getNextNumber();
+              
+              //Creates the AngularSpectrum object and diffracts the input field
+              FloatAngularSpectrum as = new FloatAngularSpectrum(M, N, wavelength,
+                  distance, inputWidth / M, inputHeight / N);
+              as.diffract(field);
+              
+              //Calculates the modulus of the output field and shows it
+              float[][] modulus = ArrayUtils.modulus(field);
+              
+              ImageProcessor ipModulus = new FloatProcessor(modulus);
+              ImagePlus impModulus = new ImagePlus("modulus", ipModulus);
+              impModulus.show();
+            }
+          }
+        </pre>
 
-<hr>
+        <hr>
 
-<h3>
-<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h3>
+        <h3>
+          <a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h3>
 
-<p>JDiffraction API can be found <a href="javadoc/index.html">here</a>.</p>
+        <p>JDiffraction API can be found <a href="javadoc/index.html">here</a>.</p>
 
-<hr>
+        <hr>
 
-<h3>
-<a class="anchor" href="#downloads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Downloads</h3>
+        <h3>
+          <a class="anchor" href="#downloads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Downloads</h3>
 
-<ul>
-<li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1.jar">JDiffraction-1.1.jar</a></li>
-<li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1-doc.zip">JDiffraction-1.1-doc.zip</a></li>
-</ul>
+        <ul>
+          <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1.jar">JDiffraction-1.1.jar</a></li>
+          <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1-doc.zip">JDiffraction-1.1-doc.zip</a></li>
+          <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction_Example.java">JDiffraction_Example.java</a></li>
+        </ul>
 
-<hr>
+        <hr>
 
-<h3>
-<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h3>
+        <h3>
+          <a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h3>
 
-<p>JDiffraction uses <a href="https://sites.google.com/site/piotrwendykier/software/jtransforms" target="_blank">JTransforms</a> FFT routines.</p>
+        <p>JDiffraction uses <a href="https://sites.google.com/site/piotrwendykier/software/jtransforms" target="_blank">JTransforms</a> FFT routines.</p>
 
-<hr>
+        <hr>
 
-<h3>
-<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact</h3>
+        <h3>
+          <a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact</h3>
 
-<ul>
-<li>Pablo Piedrahita-Quintero (<a href="mailto:jppiedrahitaq@unal.edu.co">jppiedrahitaq@unal.edu.co</a>)</li>
-<li>Carlos Trujillo (<a href="mailto:calelo36@gmail.com">calelo36@gmail.com</a>)</li>
-<li>Jorge Garcia-Sucerquia (<a href="mailto:jigarcia@unal.edu.co">jigarcia@unal.edu.co</a>)</li>
-</ul>
+        <ul>
+          <li>Pablo Piedrahita-Quintero (<a href="mailto:jppiedrahitaq@unal.edu.co">jppiedrahitaq@unal.edu.co</a>)</li>
+          <li>Carlos Trujillo (<a href="mailto:calelo36@gmail.com">calelo36@gmail.com</a>)</li>
+          <li>Jorge Garcia-Sucerquia (<a href="mailto:jigarcia@unal.edu.co">jigarcia@unal.edu.co</a>)</li>
+        </ul>
       </section>
     </div>
 
@@ -163,7 +163,7 @@ public class JDiffraction_Example implements PlugInFilter {
       </footer>
     </div>
 
-    
+
 
   </body>
 </html>
