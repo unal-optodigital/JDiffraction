@@ -1,169 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="JDiffraction : Numerical wave propagation library for Java.">
-
-    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=java&skin=desert"></script>
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>JDiffraction</title>
+    <meta charset="UTF-8">
+    <title>JDiffraction by unal-optodigital</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">JDiffraction</h1>
+      <h2 class="project-tagline">Numerical wave propagation library for Java.</h2>
+      <a href="https://github.com/unal-optodigital/JDiffraction" class="btn">View on GitHub</a>
+      <a href="https://github.com/unal-optodigital/JDiffraction/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/unal-optodigital/JDiffraction/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-      <header class="inner">
-        <a id="forkme_banner" href="https://github.com/unal-optodigital/JDiffraction">View on GitHub</a>
+    <section class="main-content">
+      <p>JDiffraction is a numerical wave propagation library for Java. Includes angular spectrum, Fresnel-Fourier and <a href="http://dx.doi.org/10.1364/AO.49.006430">Fresnel-Bluestein</a> methods. Aditionally it includes an utilities class, designed to work with the complex arrays required by the library.</p>
 
-        <h1 id="project_title">JDiffraction</h1>
-        <h2 id="project_tagline">Numerical wave propagation library for Java.</h2>
+<p>Currently it only supports calculation on CPU, in later versions we expect to add the posibility of calculation on GPGPU using <a href="http://www.jcuda.org/">JCuda</a>.</p>
 
-        <section id="downloads">
-          <a class="zip_download_link" href="https://github.com/unal-optodigital/JDiffraction/zipball/master">Download this project as a .zip file</a>
-          <a class="tar_download_link" href="https://github.com/unal-optodigital/JDiffraction/tarball/master">Download this project as a tar.gz file</a>
-        </section>
-      </header>
-    </div>
+<p>If you are using JDiffraction and find a bug, please <a href="#contact">contact us</a>.</p>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <p>JDiffraction is a numerical wave propagation library for Java. Includes angular spectrum, Fresnel-Fourier and <a href="http://dx.doi.org/10.1364/AO.49.006430" target="_blank">Fresnel-Bluestein</a> methods. Aditionally it includes an utilities class, designed to work with the complex arrays required by the library.</p>
+<hr>
 
-        <p>Currently it only supports calculation on CPU, in later versions we expect to add the posibility of calculation on GPGPU using <a href="http://www.jcuda.org/" target="_blank">JCuda</a>.</p>
+<h3>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h3>
 
-        <p>If you are using JDiffraction and find a bug, please <a href="#contact">contact us</a>.</p>
+<p>An example of usage of JDiffraction on a simple <a href="http://imagej.nih.gov/ij/index.html">ImageJ</a>'s plugin. Diffraction of a circular aperture using the angular spectrum method. The parameters are meant to produce an even number of Fresnel zones on the diffraction pattern.</p>
 
-        <hr>
+<h4>
+<a id="code" class="anchor" href="#code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Code:</h4>
 
-        <h3>
-          <a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h3>
+<hr>
 
-        <p>An example of usage of JDiffraction on a simple <a href="http://imagej.nih.gov/ij/index.html" target="_blank">ImageJ</a>'s plugin. Diffraction of a circular aperture using the angular spectrum method. The parameters are meant to produce an even number of Fresnel zones on the diffraction pattern.
-        </p>
+<h3>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h3>
 
-        <p align="center">
-          <img src="images/example-01.png" style="width:600px">
-        </p>
-        <p align="center">
-          (a) Circular aperture. (b) GenericDialog for parameters. (c) Modulus of the propagated field.
-        </p>
+<p>JDiffraction API can be found <a href="javadoc/index.html">here</a>.</p>
 
-        <h4>Code:</h4>
+<hr>
 
-        <pre class="prettyprint">
-import ij.*;
-import ij.gui.GenericDialog;
-import ij.process.*;
-import ij.plugin.filter.*;
-import unal.od.jdiffraction.cpu.FloatAngularSpectrum;
-import unal.od.jdiffraction.cpu.utils.ArrayUtils;
+<h3>
+<a id="downloads" class="anchor" href="#downloads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Downloads</h3>
 
-public class JDiffraction_Example implements PlugInFilter {
+<ul>
+<li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1.jar">JDiffraction-1.1.jar</a></li>
+<li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1-doc.zip">JDiffraction-1.1-doc.zip</a></li>
+<li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction_Example.java">JDiffraction_Example.java</a></li>
+</ul>
 
-    ImagePlus imp;
+<hr>
 
-    @Override
-    public int setup(String arg, ImagePlus imp) {
-        this.imp = imp;
-        return DOES_ALL;
-    }
+<h3>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h3>
 
-    @Override
-    public void run(ImageProcessor ip) {
-        //gets the image data and creates the complex array
-        int M = ip.getWidth();
-        int N = ip.getHeight();
-        
-        float[][] image = ip.getFloatArray();
-        float[][] field = ArrayUtils.complexAmplitude2(image, null);
-        
-        //unlocks the image because it's no longer needed
-        imp.unlock();
-        
-        //Creates a GenericDialog object to ask the user for propagation
-        //parameters
-        GenericDialog gd = new GenericDialog("Parameters");
-        gd.addNumericField("Wavelength", 633E-9, 10, 10, "m");
-        gd.addNumericField("Distance", 1, 2, 10, "m");
-        gd.addNumericField("Input width", 5E-3, 4, 10, "m");
-        gd.addNumericField("Input height", 5E-3, 4, 10, "m");
-        gd.showDialog();
-        
-        if (gd.wasCanceled()){
-            return;
-        }
-        
-        float wavelength = (float) gd.getNextNumber();
-        float distance = (float) gd.getNextNumber();
-        float inputWidth = (float) gd.getNextNumber();
-        float inputHeight = (float) gd.getNextNumber();
-        
-        //Creates the AngularSpectrum object and diffracts the input field
-        FloatAngularSpectrum as = new FloatAngularSpectrum(M, N, wavelength,
-                distance, inputWidth / M, inputHeight / N);
-        as.diffract(field);
-        
-        //Calculates the modulus of the output field and shows it
-        float[][] modulus = ArrayUtils.modulus(field);
-        
-        ImageProcessor ipModulus = new FloatProcessor(modulus);
-        ImagePlus impModulus = new ImagePlus("modulus", ipModulus);
-        impModulus.show();
-    }
-}
-        </pre>
+<p>JDiffraction uses <a href="https://sites.google.com/site/piotrwendykier/software/jtransforms">JTransforms</a> FFT routines.</p>
 
-        <hr>
+<hr>
 
-        <h3>
-          <a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h3>
+<h3>
+<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact</h3>
 
-        <p>JDiffraction API can be found <a href="javadoc/index.html">here</a>.</p>
+<ul>
+<li>Pablo Piedrahita-Quintero (<a href="mailto:jppiedrahitaq@unal.edu.co">jppiedrahitaq@unal.edu.co</a>)</li>
+<li>Carlos Trujillo (<a href="mailto:calelo36@gmail.com">calelo36@gmail.com</a>)</li>
+<li>Jorge Garcia-Sucerquia (<a href="mailto:jigarcia@unal.edu.co">jigarcia@unal.edu.co</a>)</li>
+</ul>
 
-        <hr>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/unal-optodigital/JDiffraction">JDiffraction</a> is maintained by <a href="https://github.com/unal-optodigital">unal-optodigital</a>.</span>
 
-        <h3>
-          <a class="anchor" href="#downloads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Downloads</h3>
-
-        <ul>
-          <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1.jar">JDiffraction-1.1.jar</a></li>
-          <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1-doc.zip">JDiffraction-1.1-doc.zip</a></li>
-          <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction_Example.java">JDiffraction_Example.java</a></li>
-        </ul>
-
-        <hr>
-
-        <h3>
-          <a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h3>
-
-        <p>JDiffraction uses <a href="https://sites.google.com/site/piotrwendykier/software/jtransforms" target="_blank">JTransforms</a> FFT routines.</p>
-
-        <hr>
-
-        <h3>
-          <a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact</h3>
-
-        <ul>
-          <li>Pablo Piedrahita-Quintero (<a href="mailto:jppiedrahitaq@unal.edu.co">jppiedrahitaq@unal.edu.co</a>)</li>
-          <li>Carlos Trujillo (<a href="mailto:calelo36@gmail.com">calelo36@gmail.com</a>)</li>
-          <li>Jorge Garcia-Sucerquia (<a href="mailto:jigarcia@unal.edu.co">jigarcia@unal.edu.co</a>)</li>
-        </ul>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">JDiffraction maintained by <a href="https://github.com/unal-optodigital">unal-optodigital</a></p>
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
 
+    </section>
 
-
+  
   </body>
 </html>
+
