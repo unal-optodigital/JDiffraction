@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <title>JDiffraction by unal-optodigital</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=java&skin=desert"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="images/icon.png">
+
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
+
   <body>
     <section class="page-header">
       <h1 class="project-name">JDiffraction</h1>
@@ -19,67 +24,258 @@
     </section>
 
     <section class="main-content">
-      <p>JDiffraction is a numerical wave propagation library for Java. Includes angular spectrum, Fresnel-Fourier and <a href="http://dx.doi.org/10.1364/AO.49.006430">Fresnel-Bluestein</a> methods. Aditionally it includes an utilities class, designed to work with the complex arrays required by the library.</p>
+      <p>
+        JDiffraction is a numerical wave propagation library for Java. Includes angular spectrum, Fresnel-Fourier and <a href="http://dx.doi.org/10.1364/AO.49.006430" target="_blank">Fresnel-Bluestein</a> methods. Aditionally it includes an utilities class, designed to work with the complex arrays required by the library.
+      </p>
 
-<p>Currently it only supports calculation on CPU, in later versions we expect to add the posibility of calculation on GPGPU using <a href="http://www.jcuda.org/">JCuda</a>.</p>
+      <p>
+        Currently it only supports calculation on CPU, in later versions we expect to add the posibility of calculation on GPGPU using <a href="http://www.jcuda.org/" target="_blank">JCuda</a>.
+      </p>
 
-<p>If you are using JDiffraction and find a bug, please <a href="#contact">contact us</a>.</p>
+      <p>
+        If you are using JDiffraction and find a bug, please <a href="#contact">contact us</a>.
+      </p>
 
-<hr>
+      <hr>
 
-<h3>
-<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h3>
+      <h3>
+        <a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples
+      </h3>
 
-<p>An example of usage of JDiffraction on a simple <a href="http://imagej.nih.gov/ij/index.html">ImageJ</a>'s plugin. Diffraction of a circular aperture using the angular spectrum method. The parameters are meant to produce an even number of Fresnel zones on the diffraction pattern.</p>
+      <p>
+        An example of usage of JDiffraction on a simple <a href="http://imagej.nih.gov/ij/index.html" target="_blank">ImageJ</a>'s plugin. Diffraction of a circular aperture using the angular spectrum method. The parameters are meant to produce an even number of Fresnel zones on the diffraction pattern.
+      </p>
 
-<h4>
-<a id="code" class="anchor" href="#code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Code:</h4>
+      <p align="center">
+        <img src="images/example-01.png" style="width:800px">
+      </p>
 
-<hr>
+      <p align="center">
+        (a) Circular aperture. (b) GenericDialog for parameters. (c) Modulus of the propagated field.
+      </p>
 
-<h3>
-<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h3>
+      <h4>
+        Code:
+      </h4>
 
-<p>JDiffraction API can be found <a href="javadoc/index.html">here</a>.</p>
+      <pre class="prettyprint">
+import ij.*;
+import ij.gui.GenericDialog;
+import ij.process.*;
+import ij.plugin.filter.*;
+import unal.od.jdiffraction.cpu.FloatAngularSpectrum;
+import unal.od.jdiffraction.cpu.utils.ArrayUtils;
 
-<hr>
+public class JDiffraction_Example implements PlugInFilter {
 
-<h3>
-<a id="downloads" class="anchor" href="#downloads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Downloads</h3>
+    ImagePlus imp;
 
-<ul>
-<li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1.jar">JDiffraction-1.1.jar</a></li>
-<li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1-doc.zip">JDiffraction-1.1-doc.zip</a></li>
-<li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction_Example.java">JDiffraction_Example.java</a></li>
-</ul>
+    @Override
+    public int setup(String arg, ImagePlus imp) {
+        this.imp = imp;
+        return DOES_ALL;
+    }
 
-<hr>
+    @Override
+    public void run(ImageProcessor ip) {
+        //gets the image data and creates the complex array
+        int M = ip.getWidth();
+        int N = ip.getHeight();
+        
+        float[][] image = ip.getFloatArray();
+        float[][] field = ArrayUtils.complexAmplitude2(image, null);
+        
+        //unlocks the image because it's no longer needed
+        imp.unlock();
+        
+        //Creates a GenericDialog object to ask the user for propagation
+        //parameters
+        GenericDialog gd = new GenericDialog("Parameters");
+        gd.addNumericField("Wavelength", 633E-9, 10, 10, "m");
+        gd.addNumericField("Distance", 1, 2, 10, "m");
+        gd.addNumericField("Input width", 5E-3, 4, 10, "m");
+        gd.addNumericField("Input height", 5E-3, 4, 10, "m");
+        gd.showDialog();
+        
+        if (gd.wasCanceled()){
+            return;
+        }
+        
+        float wavelength = (float) gd.getNextNumber();
+        float distance = (float) gd.getNextNumber();
+        float inputWidth = (float) gd.getNextNumber();
+        float inputHeight = (float) gd.getNextNumber();
+        
+        //Creates the AngularSpectrum object and diffracts the input field
+        FloatAngularSpectrum as = new FloatAngularSpectrum(M, N, wavelength,
+                distance, inputWidth / M, inputHeight / N);
+        as.diffract(field);
+        
+        //Calculates the modulus of the output field and shows it
+        float[][] modulus = ArrayUtils.modulus(field);
+        
+        ImageProcessor ipModulus = new FloatProcessor(modulus);
+        ImagePlus impModulus = new ImagePlus("modulus", ipModulus);
+        impModulus.show();
+    }
+}
+      </pre>
 
-<h3>
-<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h3>
+      <hr>
 
-<p>JDiffraction uses <a href="https://sites.google.com/site/piotrwendykier/software/jtransforms">JTransforms</a> FFT routines.</p>
+      <h3>
+        <a id="benchmark" class="anchor" href="#benchmark" aria-hidden="true"><span class="octicon octicon-link"></span></a>Benchmark
+      </h3>
 
-<hr>
+      <p>
+        The library was benchmarked using an Intel Core i7 2600 (3.40 GHz) and 8 GB of RAM memory. The average times of execution are given in ms.
+      </p>
 
-<h3>
-<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact</h3>
+      <h4>
+        Times with constructor
+      </h4>
 
-<ul>
-<li>Pablo Piedrahita-Quintero (<a href="mailto:jppiedrahitaq@unal.edu.co">jppiedrahitaq@unal.edu.co</a>)</li>
-<li>Carlos Trujillo (<a href="mailto:calelo36@gmail.com">calelo36@gmail.com</a>)</li>
-<li>Jorge Garcia-Sucerquia (<a href="mailto:jigarcia@unal.edu.co">jigarcia@unal.edu.co</a>)</li>
-</ul>
+      <table align="center">
+        <tbody>
+          <tr>
+            <th>Image Size (Pixels)</th>
+            <th>Angular spectrum</th>
+            <th>Fresnel - Fourier</th>
+            <th>Fresnel - Bluestein</th>
+          </tr>
+
+          <tr>
+            <td><b>256 x 256</b></td>
+            <td>24.3492</td>
+            <td>19.5261</td>
+            <td>26.5330</td>
+          </tr>
+
+          <tr>
+            <td><b>512 x 512</b></td>
+            <td>53.2297</td>
+            <td>67.8948</td>
+            <td>88.5395</td>
+          </tr>
+
+          <tr>
+            <td><b>1024 x 1024</b></td>
+            <td>215.5982</td>
+            <td>270.3236</td>
+            <td>357.8437</td>
+          </tr>
+
+          <tr>
+            <td><b>2048 x 2048</b></td>
+            <td>874.975</td>
+            <td>1115.7828</td>
+            <td>1486.3025</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>
+        Times without constructor
+      </h4>
+
+      <table>
+        <tbody>
+          <tr>
+            <th>Image Size (Pixels)</th>
+            <th>Angular spectrum</th>
+            <th>Fresnel - Fourier</th>
+            <th>Fresnel - Bluestein</th>
+          </tr>
+
+          <tr>
+            <td><b>256 x 256</b></td>
+            <td>7.051</td>
+            <td>1.1416</td>
+            <td>2.0296</td>
+          </tr>
+
+          <tr>
+            <td><b>512 x 512</b></td>
+            <td>5.3823</td>
+            <td>4.1206</td>
+            <td>7.0027</td>
+          </tr>
+
+          <tr>
+            <td><b>1024 x 1024</b></td>
+            <td>24.7995</td>
+            <td>16.1527</td>
+            <td>30.395</td>
+          </tr>
+
+          <tr>
+            <td><b>2048 x 2048</b></td>
+            <td>111.6469</td>
+            <td>71.667</td>
+            <td>135.7672</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <hr>
+
+      <h3>
+        <a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API
+      </h3>
+
+      <p>
+        JDiffraction API can be found <a href="javadoc/index.html">here</a>.
+      </p>
+
+      <hr>
+
+      <h3>
+        <a id="downloads" class="anchor" href="#downloads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Downloads
+      </h3>
+
+      <ul>
+        <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1.jar">JDiffraction-1.1.jar</a></li>
+        <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1-doc.zip">JDiffraction-1.1-doc.zip</a></li>
+        <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction_Example.java">JDiffraction_Example.java</a></li>
+      </ul>
+
+      <hr>
+
+      <h3>
+        <a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits
+      </h3>
+
+      <p>
+        JDiffraction uses <a href="https://sites.google.com/site/piotrwendykier/software/jtransforms" target="_blank">JTransforms</a> FFT routines.
+      </p>
+
+      <hr>
+
+      <h3>
+        <a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact
+      </h3>
+
+      <ul>
+        <li>Pablo Piedrahita-Quintero (<a href="mailto:jppiedrahitaq@unal.edu.co">jppiedrahitaq@unal.edu.co</a>)</li>
+        <li>Carlos Trujillo (<a href="mailto:calelo36@gmail.com">calelo36@gmail.com</a>)</li>
+        <li>Jorge Garcia-Sucerquia (<a href="mailto:jigarcia@unal.edu.co">jigarcia@unal.edu.co</a>)</li>
+      </ul>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/unal-optodigital/JDiffraction">JDiffraction</a> is maintained by <a href="https://github.com/unal-optodigital">unal-optodigital</a>.</span>
+        <p align="center">
+          <img src="images/un.png" style="height:70px" hspace="40">
+          <img src="images/group-logo.png" style="height:70px" hspace="40">
+        </p>
 
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+        <span class="site-footer-owner">
+          <a href="https://github.com/unal-optodigital/JDiffraction">JDiffraction</a> is maintained by <a href="https://github.com/unal-optodigital">unal-optodigital</a>.
+        </span>
+
+        <span class="site-footer-credits">
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </span>
       </footer>
 
     </section>
-
-  
   </body>
 </html>
-

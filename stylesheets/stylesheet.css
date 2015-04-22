@@ -120,7 +120,6 @@ a {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   font-size: 0.9rem;
   color: #383e41;
-  background-color: #f3f6fa;
   border-radius: 0.3rem; }
 .main-content pre {
   padding: 0.8rem;
@@ -129,7 +128,6 @@ a {
   font: 1rem Consolas, "Liberation Mono", Menlo, Courier, monospace;
   color: #567482;
   word-wrap: normal;
-  background-color: #f3f6fa;
   border: solid 1px #dce6f0;
   border-radius: 0.3rem; }
   .main-content pre > code {
@@ -185,6 +183,7 @@ a {
     font-weight: bold; }
   .main-content table th, .main-content table td {
     padding: 0.5rem 1rem;
+    text-align: center;
     border: 1px solid #e9ebec; }
 .main-content dl {
   padding: 0; }
