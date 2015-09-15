@@ -29,8 +29,8 @@
       <h1 class="project-name">JDiffraction</h1>
       <h2 class="project-tagline">Numerical wave propagation library for Java.</h2>
       <a href="https://github.com/unal-optodigital/JDiffraction" class="btn">View on GitHub</a>
-      <a href="https://github.com/unal-optodigital/JDiffraction/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/unal-optodigital/JDiffraction/tarball/master" class="btn">Download .tar.gz</a>
+      <a href="http://ciencias.medellin.unal.edu.co/gruposdeinvestigacion/opticayprocesamientooptodigital/downloads/JDiffraction-1.2.jar" class="btn">Download .jar</a>
+      <a href="http://ciencias.medellin.unal.edu.co/gruposdeinvestigacion/opticayprocesamientooptodigital/downloads/JDiffraction-1.2-doc.zip" class="btn">Download javadocs</a>
     </section>
 
     <section class="main-content">
@@ -53,7 +53,7 @@
       </h3>
 
       <p>
-        An example of usage of JDiffraction on a simple <a href="http://imagej.nih.gov/ij/index.html" target="_blank">ImageJ</a>'s plugin. Diffraction of a circular aperture using the angular spectrum method. The parameters are meant to produce an even number of Fresnel zones on the diffraction pattern.
+        An example of usage of JDiffraction on a simple <a href="http://imagej.nih.gov/ij/index.html" target="_blank">ImageJ</a>'s plugin. Diffraction of a circular aperture using the angular spectrum method. The parameters are meant to produce an even number of Fresnel zones on the diffraction pattern. The example can be downloaded <a href="http://ciencias.medellin.unal.edu.co/gruposdeinvestigacion/opticayprocesamientooptodigital/downloads/JDiffraction_Example.java">here</a>.
       </p>
 
       <p align="center">
@@ -91,13 +91,13 @@ public class JDiffraction_Example implements PlugInFilter {
         //gets the image data and creates the complex array
         int M = ip.getWidth();
         int N = ip.getHeight();
-        
+
         float[][] image = ip.getFloatArray();
         float[][] field = ArrayUtils.complexAmplitude2(image, null);
-        
+
         //unlocks the image because it's no longer needed
         imp.unlock();
-        
+
         //Creates a GenericDialog object to ask the user for propagation
         //parameters
         GenericDialog gd = new GenericDialog("Parameters");
@@ -106,24 +106,24 @@ public class JDiffraction_Example implements PlugInFilter {
         gd.addNumericField("Input width", 5E-3, 4, 10, "m");
         gd.addNumericField("Input height", 5E-3, 4, 10, "m");
         gd.showDialog();
-        
+
         if (gd.wasCanceled()){
             return;
         }
-        
+
         float wavelength = (float) gd.getNextNumber();
         float distance = (float) gd.getNextNumber();
         float inputWidth = (float) gd.getNextNumber();
         float inputHeight = (float) gd.getNextNumber();
-        
+
         //Creates the AngularSpectrum object and diffracts the input field
         FloatAngularSpectrum as = new FloatAngularSpectrum(M, N, wavelength,
                 distance, inputWidth / M, inputHeight / N);
         as.diffract(field);
-        
+
         //Calculates the modulus of the output field and shows it
         float[][] modulus = ArrayUtils.modulus(field);
-        
+
         ImageProcessor ipModulus = new FloatProcessor(modulus);
         ImagePlus impModulus = new ImagePlus("modulus", ipModulus);
         impModulus.show();
@@ -243,10 +243,22 @@ public class JDiffraction_Example implements PlugInFilter {
         <a id="downloads" class="anchor" href="#downloads" aria-hidden="true"><span class="octicon octicon-link"></span></a>Downloads
       </h3>
 
+      <h4>
+        Current release
+      </h4>
+
       <ul>
-        <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1.jar">JDiffraction-1.1.jar</a></li>
-        <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction-1.1-doc.zip">JDiffraction-1.1-doc.zip</a></li>
-        <li><a href="https://dl.dropboxusercontent.com/u/4183337/JDiffraction_Example.java">JDiffraction_Example.java</a></li>
+        <li><a href="http://ciencias.medellin.unal.edu.co/gruposdeinvestigacion/opticayprocesamientooptodigital/downloads/JDiffraction-1.2.jar">JDiffraction-1.2.jar</a></li>
+        <li><a href="http://ciencias.medellin.unal.edu.co/gruposdeinvestigacion/opticayprocesamientooptodigital/downloads/JDiffraction-1.2-doc.zip">JDiffraction-1.2-doc.zip</a></li>
+      </ul>
+
+      <h4>
+        Older releases
+      </h4>
+
+      <ul>
+        <li><a href="http://ciencias.medellin.unal.edu.co/gruposdeinvestigacion/opticayprocesamientooptodigital/downloads/JDiffraction-1.1.jar">JDiffraction-1.1.jar</a></li>
+        <li><a href="http://ciencias.medellin.unal.edu.co/gruposdeinvestigacion/opticayprocesamientooptodigital/downloads/JDiffraction-1.1-doc.zip">JDiffraction-1.1-doc.zip</a></li>
       </ul>
 
       <hr>
