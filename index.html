@@ -39,7 +39,7 @@
       </p>
 
       <p>
-        Currently it only supports calculation on CPU, in later versions we expect to add the posibility of calculation on GPGPU using <a href="http://www.jcuda.org/" target="_blank">JCuda</a>.
+        The library supports calculation on CPU and GPU, the latter is done using <a href="http://www.jcuda.org/" target="_blank">JCuda</a>.
       </p>
 
       <p>
@@ -53,7 +53,7 @@
       </h3>
 
       <p>
-        An example of usage of JDiffraction on a simple <a href="http://imagej.nih.gov/ij/index.html" target="_blank">ImageJ</a>'s plugin. Diffraction of a circular aperture using the angular spectrum method. The parameters are meant to produce an even number of Fresnel zones on the diffraction pattern. The example can be downloaded <a href="http://ciencias.medellin.unal.edu.co/gruposdeinvestigacion/opticayprocesamientooptodigital/downloads/JDiffraction_Example.java">here</a>.
+        An example of usage of JDiffraction on a simple <a href="http://imagej.nih.gov/ij/index.html" target="_blank">ImageJ</a>'s plugin. Diffraction of a circular aperture using the angular spectrum method. The parameters are meant to produce an even number of Fresnel zones on the diffraction pattern. The example can be downloaded as a <code>.java</code> file <a href="http://ciencias.medellin.unal.edu.co/gruposdeinvestigacion/opticayprocesamientooptodigital/downloads/JDiffraction_Example.java">here</a>.
       </p>
 
       <p align="center">
@@ -138,91 +138,113 @@ public class JDiffraction_Example implements PlugInFilter {
       </h3>
 
       <p>
-        The library was benchmarked using an Intel Core i7 2600 (3.40 GHz) and 8 GB of RAM memory. The average times of execution are given in ms.
+        The library was benchmarked in its single precision versions, using a desktop PC with Intel Core i7 2600 (3.40 GHz), 8 GB of RAM memory and a NVIDIA GeForce GTX 580. The average times of execution are given in ms.
       </p>
 
       <h4>
-        Times with constructor
+        CPU times with and without constructor
       </h4>
 
       <table align="center">
         <tbody>
           <tr>
-            <th>Image Size (Pixels)</th>
-            <th>Angular spectrum</th>
-            <th>Fresnel - Fourier</th>
-            <th>Fresnel - Bluestein</th>
+            <th rowspan="2">Image Size (Pixels)</th>
+            <th colspan="2">Angular spectrum</th>
+            <th colspan="2">Fresnel - Fourier</th>
+            <th colspan="2">Fresnel - Bluestein</th>
           </tr>
-
-          <tr>
-            <td><b>256 x 256</b></td>
-            <td>24.3492</td>
-            <td>19.5261</td>
-            <td>26.5330</td>
+		  
+		  <tr>
+            <td><b>w/ const.</b></td>
+			<td><b>w/o const.</b></td>
+			<td><b>w/ const.</b></td>
+			<td><b>w/o const.</b></td>
+			<td><b>w/ const.</b></td>
+			<td><b>w/o const.</b></td>
           </tr>
-
+		  
           <tr>
             <td><b>512 x 512</b></td>
-            <td>53.2297</td>
-            <td>67.8948</td>
-            <td>88.5395</td>
+            <td>53.2</td>
+			<td>5.4</td>
+            <td>67.9</td>
+			<td>4.1</td>
+            <td>88.5</td>
+			<td>7</td>
           </tr>
 
           <tr>
             <td><b>1024 x 1024</b></td>
-            <td>215.5982</td>
-            <td>270.3236</td>
-            <td>357.8437</td>
+            <td>215.6</td>
+			<td>24.8</td>
+            <td>270.3</td>
+			<td>16.2</td>
+            <td>357.8</td>
+			<td>30.4</td>
           </tr>
 
           <tr>
             <td><b>2048 x 2048</b></td>
-            <td>874.975</td>
-            <td>1115.7828</td>
-            <td>1486.3025</td>
+            <td>874.9</td>
+			<td>111.6</td>
+            <td>1115.8</td>
+			<td>71.7</td>
+            <td>1486.3</td>
+			<td>135.7</td>
           </tr>
         </tbody>
       </table>
 
       <h4>
-        Times without constructor
+        GPU times with and without constructor
       </h4>
 
-      <table>
+      <table align="center">
         <tbody>
           <tr>
-            <th>Image Size (Pixels)</th>
-            <th>Angular spectrum</th>
-            <th>Fresnel - Fourier</th>
-            <th>Fresnel - Bluestein</th>
+            <th rowspan="2">Image Size (Pixels)</th>
+            <th colspan="2">Angular spectrum</th>
+            <th colspan="2">Fresnel - Fourier</th>
+            <th colspan="2">Fresnel - Bluestein</th>
           </tr>
-
-          <tr>
-            <td><b>256 x 256</b></td>
-            <td>7.051</td>
-            <td>1.1416</td>
-            <td>2.0296</td>
+		  
+		  <tr>
+            <td><b>w/ const.</b></td>
+			<td><b>w/o const.</b></td>
+			<td><b>w/ const.</b></td>
+			<td><b>w/o const.</b></td>
+			<td><b>w/ const.</b></td>
+			<td><b>w/o const.</b></td>
           </tr>
-
+		  
           <tr>
             <td><b>512 x 512</b></td>
-            <td>5.3823</td>
-            <td>4.1206</td>
-            <td>7.0027</td>
+            <td>3.4</td>
+			<td>2.5</td>
+            <td>3</td>
+			<td>2.1</td>
+            <td>4.2</td>
+			<td>3.4</td>
           </tr>
 
           <tr>
             <td><b>1024 x 1024</b></td>
-            <td>24.7995</td>
-            <td>16.1527</td>
-            <td>30.395</td>
+            <td>5.9</td>
+			<td>4.8</td>
+			<td>4.8</td>
+			<td>4.1</td>
+			<td>8.1</td>
+			<td>7.2</td>
           </tr>
 
           <tr>
             <td><b>2048 x 2048</b></td>
-            <td>111.6469</td>
-            <td>71.667</td>
-            <td>135.7672</td>
+            <td>15.5</td>
+			<td>15</td>
+			<td>14.1</td>
+			<td>13.5</td>
+			<td>22.4</td>
+			<td>21.9</td>
           </tr>
         </tbody>
       </table>
