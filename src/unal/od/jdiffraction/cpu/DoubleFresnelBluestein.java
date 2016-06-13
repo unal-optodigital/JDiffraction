@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Universidad Nacional de Colombia
+ * Copyright 2016 Universidad Nacional de Colombia
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,14 @@ import org.jtransforms.fft.DoubleFFT_2D;
 import unal.od.jdiffraction.cpu.utils.ArrayUtils;
 
 /**
- * Computes wave diffraction through Fresnel-Bluestein method
- * (<a href="http://dx.doi.org/10.1364/AO.49.006430" target="_blank">http://dx.doi.org/10.1364/AO.49.006430</a>).
+ * Computes wave diffraction through
+ * <a href="http://dx.doi.org/10.1364/AO.49.006430" target="_blank">Fresnel-Bluestein</a>
+ * method with double precision.
  *
  * @author Pablo Piedrahita-Quintero (jppiedrahitaq@unal.edu.co)
+ * @author Carlos Trujillo (catrujila@unal.edu.co)
  * @author Jorge Garcia-Sucerquia (jigarcia@unal.edu.co)
- * 
+ *
  * @since JDiffraction 1.0
  */
 public class DoubleFresnelBluestein extends DoublePropagator {
@@ -37,10 +39,10 @@ public class DoubleFresnelBluestein extends DoublePropagator {
     /**
      * Creates a new instance of DoubleFresnelBluestein. Also performs kernel
      * calculations.
-     * 
+     *
      * @param M Number of data points on x direction.
      * @param N Number of data points on y direction.
-     * @param lambda Wavelenght
+     * @param lambda Wavelength.
      * @param z Distance.
      * @param dx Sampling pitch on x direction.
      * @param dy Sampling pitch on y direction.
@@ -76,8 +78,8 @@ public class DoubleFresnelBluestein extends DoublePropagator {
         endM = 2 * M2 - 1;
         endN = 2 * N2 - 1;
 
-        factor =  Math.PI / (lambda * z);
-        factor2 =  Math.PI * 2 * z / lambda;
+        factor = Math.PI / (lambda * z);
+        factor2 = Math.PI * 2 * z / lambda;
         factor3 = lambda * z;
 
         kernelFactorX1 = dx * (dx - dxOut);
@@ -106,21 +108,21 @@ public class DoubleFresnelBluestein extends DoublePropagator {
                 kernelPhase2 = factor * (c2 + c4);
 
                 kernel1[i][2 * j] = kernel1[endM - i][2 * j] = kernel1[i][2 * (endN - j)]
-                        = kernel1[endM - i][2 * (endN - j)] =  Math.cos(kernelPhase1);
+                        = kernel1[endM - i][2 * (endN - j)] = Math.cos(kernelPhase1);
                 kernel1[i][2 * j + 1] = kernel1[endM - i][2 * j + 1] = kernel1[i][2 * (endN - j) + 1]
-                        = kernel1[endM - i][2 * (endN - j) + 1] =  Math.sin(kernelPhase1);
+                        = kernel1[endM - i][2 * (endN - j) + 1] = Math.sin(kernelPhase1);
 
                 kernel2[i][2 * j] = kernel2[endM - i][2 * j] = kernel2[i][2 * (endN - j)]
-                        = kernel2[endM - i][2 * (endN - j)] =  Math.cos(kernelPhase2);
+                        = kernel2[endM - i][2 * (endN - j)] = Math.cos(kernelPhase2);
                 kernel2[i][2 * j + 1] = kernel2[endM - i][2 * j + 1] = kernel2[i][2 * (endN - j) + 1]
-                        = kernel2[endM - i][2 * (endN - j) + 1] =  Math.sin(kernelPhase2);
+                        = kernel2[endM - i][2 * (endN - j) + 1] = Math.sin(kernelPhase2);
 
                 phase = -factor * (p1 + p2);
 
                 outputPhase[i][2 * j] = outputPhase[endM - i][2 * j] = outputPhase[i][2 * (endN - j)]
-                        = outputPhase[endM - i][2 * (endN - j)] =  Math.sin(factor2 + phase) / factor3;
+                        = outputPhase[endM - i][2 * (endN - j)] = Math.sin(factor2 + phase) / factor3;
                 outputPhase[i][2 * j + 1] = outputPhase[endM - i][2 * j + 1] = outputPhase[i][2 * (endN - j) + 1]
-                        = outputPhase[endM - i][2 * (endN - j) + 1] =  -Math.cos(factor2 + phase) / factor3;
+                        = outputPhase[endM - i][2 * (endN - j) + 1] = -Math.cos(factor2 + phase) / factor3;
             }
         }
 
@@ -141,16 +143,16 @@ public class DoubleFresnelBluestein extends DoublePropagator {
                 kernelPhase1 = factor * (c1 + c3);
                 kernelPhase2 = factor * (c2 + c4);
 
-                kernel1[M - 1][2 * j] = kernel1[M - 1][2 * (endN - j)] =  Math.cos(kernelPhase1);
-                kernel1[M - 1][2 * j + 1] = kernel1[M - 1][2 * (endN - j) + 1] =  Math.sin(kernelPhase1);
+                kernel1[M - 1][2 * j] = kernel1[M - 1][2 * (endN - j)] = Math.cos(kernelPhase1);
+                kernel1[M - 1][2 * j + 1] = kernel1[M - 1][2 * (endN - j) + 1] = Math.sin(kernelPhase1);
 
-                kernel2[M - 1][2 * j] = kernel2[M - 1][2 * (endN - j)] =  Math.cos(kernelPhase2);
-                kernel2[M - 1][2 * j + 1] = kernel2[M - 1][2 * (endN - j) + 1] =  Math.sin(kernelPhase2);
+                kernel2[M - 1][2 * j] = kernel2[M - 1][2 * (endN - j)] = Math.cos(kernelPhase2);
+                kernel2[M - 1][2 * j + 1] = kernel2[M - 1][2 * (endN - j) + 1] = Math.sin(kernelPhase2);
 
                 phase = -factor * (p1 + p2);
 
-                outputPhase[M - 1][2 * j] = outputPhase[M - 1][2 * (endN - j)] =  Math.sin(factor2 + phase) / factor3;
-                outputPhase[M - 1][2 * j + 1] = outputPhase[M - 1][2 * (endN - j) + 1] =  -Math.cos(factor2 + phase) / factor3;
+                outputPhase[M - 1][2 * j] = outputPhase[M - 1][2 * (endN - j)] = Math.sin(factor2 + phase) / factor3;
+                outputPhase[M - 1][2 * j + 1] = outputPhase[M - 1][2 * (endN - j) + 1] = -Math.cos(factor2 + phase) / factor3;
             }
         }
 
@@ -171,16 +173,16 @@ public class DoubleFresnelBluestein extends DoublePropagator {
                 kernelPhase1 = factor * (c1 + c3);
                 kernelPhase2 = factor * (c2 + c4);
 
-                kernel1[i][2 * (N - 1)] = kernel1[endM - i][2 * (N - 1)] =  Math.cos(kernelPhase1);
-                kernel1[i][2 * (N - 1) + 1] = kernel1[endM - i][2 * (N - 1) + 1] =  Math.sin(kernelPhase1);
+                kernel1[i][2 * (N - 1)] = kernel1[endM - i][2 * (N - 1)] = Math.cos(kernelPhase1);
+                kernel1[i][2 * (N - 1) + 1] = kernel1[endM - i][2 * (N - 1) + 1] = Math.sin(kernelPhase1);
 
-                kernel2[i][2 * (N - 1)] = kernel2[endM - i][2 * (N - 1)] =  Math.cos(kernelPhase2);
-                kernel2[i][2 * (N - 1) + 1] = kernel2[endM - i][2 * (N - 1) + 1] =  Math.sin(kernelPhase2);
+                kernel2[i][2 * (N - 1)] = kernel2[endM - i][2 * (N - 1)] = Math.cos(kernelPhase2);
+                kernel2[i][2 * (N - 1) + 1] = kernel2[endM - i][2 * (N - 1) + 1] = Math.sin(kernelPhase2);
 
                 phase = -factor * (p1 + p2);
 
-                outputPhase[i][2 * (N - 1)] = outputPhase[endM - i][2 * (N - 1)] =  Math.sin(factor2 + phase) / factor3;
-                outputPhase[i][2 * (N - 1) + 1] = outputPhase[endM - i][2 * (N - 1) + 1] =  -Math.cos(factor2 + phase) / factor3;
+                outputPhase[i][2 * (N - 1)] = outputPhase[endM - i][2 * (N - 1)] = Math.sin(factor2 + phase) / factor3;
+                outputPhase[i][2 * (N - 1) + 1] = outputPhase[endM - i][2 * (N - 1) + 1] = -Math.cos(factor2 + phase) / factor3;
             }
         }
 
@@ -201,36 +203,31 @@ public class DoubleFresnelBluestein extends DoublePropagator {
             kernelPhase1 = factor * (c1 + c3);
             kernelPhase2 = factor * (c2 + c4);
 
-            kernel1[M - 1][2 * (N - 1)] =  Math.cos(kernelPhase1);
-            kernel1[M - 1][2 * (N - 1) + 1] =  Math.sin(kernelPhase1);
+            kernel1[M - 1][2 * (N - 1)] = Math.cos(kernelPhase1);
+            kernel1[M - 1][2 * (N - 1) + 1] = Math.sin(kernelPhase1);
 
-            kernel2[M - 1][2 * (N - 1)] =  Math.cos(kernelPhase2);
-            kernel2[M - 1][2 * (N - 1) + 1] =  Math.sin(kernelPhase2);
+            kernel2[M - 1][2 * (N - 1)] = Math.cos(kernelPhase2);
+            kernel2[M - 1][2 * (N - 1) + 1] = Math.sin(kernelPhase2);
 
             phase = -factor * (p1 + p2);
 
-            outputPhase[M - 1][2 * (N - 1)] =  Math.sin(factor2 + phase) / factor3;
-            outputPhase[M - 1][2 * (N - 1) + 1] =  -Math.cos(factor2 + phase) / factor3;
+            outputPhase[M - 1][2 * (N - 1)] = Math.sin(factor2 + phase) / factor3;
+            outputPhase[M - 1][2 * (N - 1) + 1] = -Math.cos(factor2 + phase) / factor3;
         }
 
-        ArrayUtils.complexShift(kernel2);
         fft.complexForward(kernel2);
-        ArrayUtils.complexShift(kernel2);
     }
 
     @Override
     public void diffract(double[][] field) {
-        if (M != field.length || N != (field[0].length / 2)) {
+        if (M != field.length || 2 * N != field[0].length) {
             throw new IllegalArgumentException("Array dimension must be " + M + " x " + 2 * N + ".");
         }
 
         ArrayUtils.complexMultiplication2(field, kernel1);
-        ArrayUtils.complexShift(field);
         fft.complexForward(field);
-        ArrayUtils.complexShift(field);
         ArrayUtils.complexMultiplication2(field, kernel2);
-        ArrayUtils.complexShift(field);
-        fft.complexInverse(field, false);
+        fft.complexInverse(field, true);
         ArrayUtils.complexShift(field);
         ArrayUtils.complexMultiplication2(field, outputPhase);
     }

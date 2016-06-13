@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Universidad Nacional de Colombia
+ * Copyright 2016 Universidad Nacional de Colombia
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@ import org.jtransforms.fft.FloatFFT_2D;
 import unal.od.jdiffraction.cpu.utils.ArrayUtils;
 
 /**
- * Computes wave diffraction through Fresnel-Fourier method.
- * 
+ * Computes wave diffraction through Fresnel-Fourier method with single
+ * precision.
+ *
  * @author Pablo Piedrahita-Quintero (jppiedrahitaq@unal.edu.co)
+ * @author Carlos Trujillo (catrujila@unal.edu.co)
  * @author Jorge Garcia-Sucerquia (jigarcia@unal.edu.co)
- * 
+ *
  * @since JDiffraction 1.0
  */
 public class FloatFresnelFourier extends FloatPropagator {
@@ -36,10 +38,10 @@ public class FloatFresnelFourier extends FloatPropagator {
     /**
      * Creates a new instance of FloatFresnelFourier. Also performs kernel
      * calculations.
-     * 
+     *
      * @param M Number of data points on x direction.
      * @param N Number of data points on y direction.
-     * @param lambda Wavelenght
+     * @param lambda Wavelength.
      * @param z Distance.
      * @param dx Sampling pitch on x direction.
      * @param dy Sampling pitch on y direction.
@@ -94,7 +96,7 @@ public class FloatFresnelFourier extends FloatPropagator {
                 phase *= factor;
                 kernel[i][2 * j] = kernel[endM - i][2 * j] = kernel[i][2 * (endN - j)]
                         = kernel[endM - i][2 * (endN - j)] = (float) Math.cos(phase);
-                
+
                 kernel[i][2 * j + 1] = kernel[endM - i][2 * j + 1] = kernel[i][2 * (endN - j) + 1]
                         = kernel[endM - i][2 * (endN - j) + 1] = (float) Math.sin(phase);
 
@@ -102,7 +104,7 @@ public class FloatFresnelFourier extends FloatPropagator {
                 phase *= factor;
                 outputPhase[i][2 * j] = outputPhase[endM - i][2 * j] = outputPhase[i][2 * (endN - j)]
                         = outputPhase[endM - i][2 * (endN - j)] = (float) Math.sin(factor2 + phase) * factor3;
-                
+
                 outputPhase[i][2 * j + 1] = outputPhase[endM - i][2 * j + 1] = outputPhase[i][2 * (endN - j) + 1]
                         = outputPhase[endM - i][2 * (endN - j) + 1] = (float) -Math.cos(factor2 + phase) * factor3;
             }
@@ -170,7 +172,7 @@ public class FloatFresnelFourier extends FloatPropagator {
 
     @Override
     public void diffract(float[][] field) {
-        if (M != field.length || N != (field[0].length / 2)) {
+        if (M != field.length || 2 * N != field[0].length) {
             throw new IllegalArgumentException("Array dimension must be " + M + " x " + 2 * N + ".");
         }
 

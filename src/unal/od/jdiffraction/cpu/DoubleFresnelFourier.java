@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Universidad Nacional de Colombia
+ * Copyright 2016 Universidad Nacional de Colombia
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@ import org.jtransforms.fft.DoubleFFT_2D;
 import unal.od.jdiffraction.cpu.utils.ArrayUtils;
 
 /**
- * Computes wave diffraction through Fresnel-Fourier method.
- * 
+ * Computes wave diffraction through Fresnel-Fourier method with double
+ * precision.
+ *
  * @author Pablo Piedrahita-Quintero (jppiedrahitaq@unal.edu.co)
+ * @author Carlos Trujillo (catrujila@unal.edu.co)
  * @author Jorge Garcia-Sucerquia (jigarcia@unal.edu.co)
- * 
+ *
  * @since JDiffraction 1.0
  */
 public class DoubleFresnelFourier extends DoublePropagator {
@@ -36,10 +38,10 @@ public class DoubleFresnelFourier extends DoublePropagator {
     /**
      * Creates a new instance of DoubleFresnelFourier. Also performs kernel
      * calculations.
-     * 
+     *
      * @param M Number of data points on x direction.
      * @param N Number of data points on y direction.
-     * @param lambda Wavelenght
+     * @param lambda Wavelength.
      * @param z Distance.
      * @param dx Sampling pitch on x direction.
      * @param dy Sampling pitch on y direction.
@@ -77,8 +79,8 @@ public class DoubleFresnelFourier extends DoublePropagator {
 
         dxSq = dx * dx;
         dySq = dy * dy;
-        factor =  Math.PI / (lambda * z);
-        factor2 =  Math.PI * 2 * z / lambda;
+        factor = Math.PI / (lambda * z);
+        factor2 = Math.PI * 2 * z / lambda;
         factor3 = dx * dy / (lambda * z);
 
         for (int i = 0; i < M2; i++) {
@@ -93,18 +95,18 @@ public class DoubleFresnelFourier extends DoublePropagator {
                 phase = p1 + j2 * j2 * dySq;
                 phase *= factor;
                 kernel[i][2 * j] = kernel[endM - i][2 * j] = kernel[i][2 * (endN - j)]
-                        = kernel[endM - i][2 * (endN - j)] =  Math.cos(phase);
-                
+                        = kernel[endM - i][2 * (endN - j)] = Math.cos(phase);
+
                 kernel[i][2 * j + 1] = kernel[endM - i][2 * j + 1] = kernel[i][2 * (endN - j) + 1]
-                        = kernel[endM - i][2 * (endN - j) + 1] =  Math.sin(phase);
+                        = kernel[endM - i][2 * (endN - j) + 1] = Math.sin(phase);
 
                 phase = p2 + j2 * j2 * dyOutSq;
                 phase *= factor;
                 outputPhase[i][2 * j] = outputPhase[endM - i][2 * j] = outputPhase[i][2 * (endN - j)]
-                        = outputPhase[endM - i][2 * (endN - j)] =  Math.sin(factor2 + phase) * factor3;
-                
+                        = outputPhase[endM - i][2 * (endN - j)] = Math.sin(factor2 + phase) * factor3;
+
                 outputPhase[i][2 * j + 1] = outputPhase[endM - i][2 * j + 1] = outputPhase[i][2 * (endN - j) + 1]
-                        = outputPhase[endM - i][2 * (endN - j) + 1] =  -Math.cos(factor2 + phase) * factor3;
+                        = outputPhase[endM - i][2 * (endN - j) + 1] = -Math.cos(factor2 + phase) * factor3;
             }
         }
 
@@ -119,13 +121,13 @@ public class DoubleFresnelFourier extends DoublePropagator {
 
                 phase = p1 + j2 * j2 * dySq;
                 phase *= factor;
-                kernel[M - 1][2 * j] = kernel[M - 1][2 * (endN - j)] =  Math.cos(phase);
-                kernel[M - 1][2 * j + 1] = kernel[M - 1][2 * (endN - j) + 1] =  Math.sin(phase);
+                kernel[M - 1][2 * j] = kernel[M - 1][2 * (endN - j)] = Math.cos(phase);
+                kernel[M - 1][2 * j + 1] = kernel[M - 1][2 * (endN - j) + 1] = Math.sin(phase);
 
                 phase = p2 + j2 * j2 * dyOutSq;
                 phase *= factor;
-                outputPhase[M - 1][2 * j] = outputPhase[M - 1][2 * (endN - j)] =  Math.sin(factor2 + phase) * factor3;
-                outputPhase[M - 1][2 * j + 1] = outputPhase[M - 1][2 * (endN - j) + 1] =  -Math.cos(factor2 + phase) * factor3;
+                outputPhase[M - 1][2 * j] = outputPhase[M - 1][2 * (endN - j)] = Math.sin(factor2 + phase) * factor3;
+                outputPhase[M - 1][2 * j + 1] = outputPhase[M - 1][2 * (endN - j) + 1] = -Math.cos(factor2 + phase) * factor3;
             }
         }
 
@@ -140,13 +142,13 @@ public class DoubleFresnelFourier extends DoublePropagator {
 
                 phase = p1 + j2 * j2 * dySq;
                 phase *= factor;
-                kernel[i][2 * (N - 1)] = kernel[endM - i][2 * (N - 1)] =  Math.cos(phase);
-                kernel[i][2 * (N - 1) + 1] = kernel[endM - i][2 * (N - 1) + 1] =  Math.sin(phase);
+                kernel[i][2 * (N - 1)] = kernel[endM - i][2 * (N - 1)] = Math.cos(phase);
+                kernel[i][2 * (N - 1) + 1] = kernel[endM - i][2 * (N - 1) + 1] = Math.sin(phase);
 
                 phase = p2 + j2 * j2 * dyOutSq;
                 phase *= factor;
-                outputPhase[i][2 * (N - 1)] = outputPhase[endM - i][2 * (N - 1)] =  Math.sin(factor2 + phase) * factor3;
-                outputPhase[i][2 * (N - 1) + 1] = outputPhase[endM - i][2 * (N - 1) + 1] =  -Math.cos(factor2 + phase) * factor3;
+                outputPhase[i][2 * (N - 1)] = outputPhase[endM - i][2 * (N - 1)] = Math.sin(factor2 + phase) * factor3;
+                outputPhase[i][2 * (N - 1) + 1] = outputPhase[endM - i][2 * (N - 1) + 1] = -Math.cos(factor2 + phase) * factor3;
             }
         }
 
@@ -158,19 +160,19 @@ public class DoubleFresnelFourier extends DoublePropagator {
 
             phase = i2 * i2 * dxSq + j2 * j2 * dySq;
             phase *= factor;
-            kernel[M - 1][2 * (N - 1)] =  Math.cos(phase);
-            kernel[M - 1][2 * (N - 1) + 1] =  Math.sin(phase);
+            kernel[M - 1][2 * (N - 1)] = Math.cos(phase);
+            kernel[M - 1][2 * (N - 1) + 1] = Math.sin(phase);
 
             phase = i2 * i2 * dxOutSq + j2 * j2 * dyOutSq;
             phase *= factor;
-            outputPhase[M - 1][2 * (N - 1)] =  Math.sin(factor2 + phase) * factor3;
-            outputPhase[M - 1][2 * (N - 1) + 1] =  -Math.cos(factor2 + phase) * factor3;
+            outputPhase[M - 1][2 * (N - 1)] = Math.sin(factor2 + phase) * factor3;
+            outputPhase[M - 1][2 * (N - 1) + 1] = -Math.cos(factor2 + phase) * factor3;
         }
     }
 
     @Override
     public void diffract(double[][] field) {
-        if (M != field.length || N != (field[0].length / 2)) {
+        if (M != field.length || 2 * N != field[0].length) {
             throw new IllegalArgumentException("Array dimension must be " + M + " x " + 2 * N + ".");
         }
 

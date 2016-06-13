@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Universidad Nacional de Colombia
+ * Copyright 2016 Universidad Nacional de Colombia
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,11 @@ import org.jtransforms.fft.DoubleFFT_2D;
 import unal.od.jdiffraction.cpu.utils.ArrayUtils;
 
 /**
- * Computes wave diffraction through angular spectrum method.
+ * Computes wave diffraction through angular spectrum method with double
+ * precision.
  *
  * @author Pablo Piedrahita-Quintero (jppiedrahitaq@unal.edu.co)
+ * @author Carlos Trujillo (catrujila@unal.edu.co)
  * @author Jorge Garcia-Sucerquia (jigarcia@unal.edu.co)
  *
  * @since JDiffraction 1.0
@@ -39,7 +41,7 @@ public class DoubleAngularSpectrum extends DoublePropagator {
      *
      * @param M Number of data points on x direction.
      * @param N Number of data points on y direction.
-     * @param lambda Wavelenght
+     * @param lambda Wavelength.
      * @param z Distance.
      * @param dx Sampling pitch on x direction.
      * @param dy Sampling pitch on y direction.
@@ -153,7 +155,7 @@ public class DoubleAngularSpectrum extends DoublePropagator {
     @Override
     public void diffract(double[][] field) {
 
-        if (M != field.length || N != (field[0].length / 2)) {
+        if (M != field.length || 2 * N != field[0].length) {
             throw new IllegalArgumentException("Array dimension must be " + M + " x " + 2 * N + ".");
         }
 
@@ -161,7 +163,7 @@ public class DoubleAngularSpectrum extends DoublePropagator {
         ArrayUtils.complexShift(field);
         ArrayUtils.complexMultiplication2(field, kernel);
         ArrayUtils.complexShift(field);
-        fft.complexInverse(field, false);
+        fft.complexInverse(field, true);
     }
 
     public int getM() {

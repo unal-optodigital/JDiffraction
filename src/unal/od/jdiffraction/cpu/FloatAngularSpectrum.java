@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Universidad Nacional de Colombia
+ * Copyright 2016 Universidad Nacional de Colombia
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@ import org.jtransforms.fft.FloatFFT_2D;
 import unal.od.jdiffraction.cpu.utils.ArrayUtils;
 
 /**
- * Computes wave diffraction through angular spectrum method.
- * 
+ * Computes wave diffraction through angular spectrum method with single
+ * precision.
+ *
  * @author Pablo Piedrahita-Quintero (jppiedrahitaq@unal.edu.co)
+ * @author Carlos Trujillo (catrujila@unal.edu.co)
  * @author Jorge Garcia-Sucerquia (jigarcia@unal.edu.co)
- * 
+ *
  * @since JDiffraction 1.0
  */
 public class FloatAngularSpectrum extends FloatPropagator {
@@ -39,7 +41,7 @@ public class FloatAngularSpectrum extends FloatPropagator {
      *
      * @param M Number of data points on x direction.
      * @param N Number of data points on y direction.
-     * @param lambda Wavelenght
+     * @param lambda Wavelength.
      * @param z Distance.
      * @param dx Sampling pitch on x direction.
      * @param dy Sampling pitch on y direction.
@@ -62,9 +64,9 @@ public class FloatAngularSpectrum extends FloatPropagator {
 
         int M2, N2, endM, endN;
         float kernelFactor, lambdaSq, dfx, dfy, dfxSq, dfySq;
-        
+
         M2 = M / 2;
-        N2 = N / 2;        
+        N2 = N / 2;
         endM = 2 * M2 - 1;
         endN = 2 * N2 - 1;
         lambdaSq = lambda * lambda;
@@ -108,7 +110,7 @@ public class FloatAngularSpectrum extends FloatPropagator {
                 kernelPhase = 1 - kernelPhase;
                 kernelPhase = (float) Math.sqrt(kernelPhase);
                 kernelPhase *= kernelFactor;
-                
+
                 kernel[M - 1][2 * j] = kernel[M - 1][2 * (endN - j)] = (float) Math.cos(kernelPhase);
                 kernel[M - 1][2 * j + 1] = kernel[M - 1][2 * (endN - j) + 1] = (float) Math.sin(kernelPhase);
             }
@@ -152,8 +154,7 @@ public class FloatAngularSpectrum extends FloatPropagator {
 
     @Override
     public void diffract(float[][] field) {
-
-        if (M != field.length || N != (field[0].length / 2)) {
+        if (M != field.length || 2 * N != field[0].length) {
             throw new IllegalArgumentException("Array dimension must be " + M + " x " + 2 * N + ".");
         }
 
@@ -161,7 +162,7 @@ public class FloatAngularSpectrum extends FloatPropagator {
         ArrayUtils.complexShift(field);
         ArrayUtils.complexMultiplication2(field, kernel);
         ArrayUtils.complexShift(field);
-        fft.complexInverse(field, false);
+        fft.complexInverse(field, true);
     }
 
     public int getM() {

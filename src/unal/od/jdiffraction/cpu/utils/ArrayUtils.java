@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Universidad Nacional de Colombia
+ * Copyright 2016 Universidad Nacional de Colombia
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,14 @@ package unal.od.jdiffraction.cpu.utils;
  * }
  *
  * @author Pablo Piedrahita-Quintero (jppiedrahitaq@unal.edu.co)
+ * @author Carlos Trujillo (catrujila@unal.edu.co)
  * @author Jorge Garcia-Sucerquia (jigarcia@unal.edu.co)
  *
  * @since JDiffraction 1.1
  */
 public class ArrayUtils {
+
+    private static final String VERSION = "1.2";
 
     private ArrayUtils() {
     }
@@ -48,6 +51,17 @@ public class ArrayUtils {
         } else if (a[0].length == 0) {
             throw new IllegalArgumentException("Arrays dimension must be greater than 0.");
         }
+    }
+
+    /**
+     * Returns the library version as a String.
+     *
+     * @return library version
+     *
+     * @since JDiffraction 1.2
+     */
+    public static String jDiffractionVersion() {
+        return VERSION;
     }
 
     /**
@@ -220,7 +234,7 @@ public class ArrayUtils {
             throw new IllegalArgumentException("Arrays must be equal-sized.");
         }
 
-        float[][] multiplied = new float[M][N];
+        float[][] multiplied = new float[M][2 * N];
 
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < N / 2; j++) {
@@ -247,7 +261,7 @@ public class ArrayUtils {
             throw new IllegalArgumentException("Arrays must be equal-sized.");
         }
 
-        double[][] multiplied = new double[M][N];
+        double[][] multiplied = new double[M][2 * N];
 
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < N / 2; j++) {
@@ -787,7 +801,7 @@ public class ArrayUtils {
      * c d       b a
      * }
      *
-     * @param a complex array
+     * @param a real array
      */
     public static void realShift(float[][] a) {
         checkDimension(a);
@@ -821,7 +835,7 @@ public class ArrayUtils {
      * c d       b a
      * }
      *
-     * @param a complex array
+     * @param a real array
      */
     public static void realShift(double[][] a) {
         checkDimension(a);
@@ -842,6 +856,90 @@ public class ArrayUtils {
                 tempShift = a[i + M2][j];
                 a[i + M2][j] = a[i][j + N2];
                 a[i][j + N2] = tempShift;
+            }
+        }
+    }
+
+    /**
+     * Computes the pointwise multiplication of an array by {@code num}, leaving
+     * the result in {@code a}.
+     *
+     * @param a array
+     * @param num number
+     *
+     * @since JDiffraction 1.2
+     */
+    public static void multiply(float[][] a, float num) {
+        checkDimension(a);
+        int M = a.length;
+        int N = a[0].length;
+
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                a[i][j] = a[i][j] * num;
+            }
+        }
+    }
+
+    /**
+     * Computes the pointwise multiplication of an array by {@code num}, leaving
+     * the result in {@code a}.
+     *
+     * @param a array
+     * @param num number
+     *
+     * @since JDiffraction 1.2
+     */
+    public static void multiply(double[][] a, double num) {
+        checkDimension(a);
+        int M = a.length;
+        int N = a[0].length;
+
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                a[i][j] = a[i][j] * num;
+            }
+        }
+    }
+
+    /**
+     * Computes the pointwise division of an array by {@code num}, leaving the
+     * result in {@code a}.
+     *
+     * @param a array
+     * @param num number
+     *
+     * @since JDiffraction 1.2
+     */
+    public static void divide(float[][] a, float num) {
+        checkDimension(a);
+        int M = a.length;
+        int N = a[0].length;
+
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                a[i][j] = a[i][j] / num;
+            }
+        }
+    }
+
+    /**
+     * Computes the pointwise division of an array by {@code num}, leaving the
+     * result in {@code a}.
+     *
+     * @param a array
+     * @param num number
+     *
+     * @since JDiffraction 1.2
+     */
+    public static void divide(double[][] a, double num) {
+        checkDimension(a);
+        int M = a.length;
+        int N = a[0].length;
+
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                a[i][j] = a[i][j] / num;
             }
         }
     }
@@ -971,7 +1069,7 @@ public class ArrayUtils {
     }
 
     /**
-     * Scales a real array to {@code [0 - maxScale]}.
+     * Scales a real array to {@code [0, maxScale]}.
      *
      * @param a array
      * @param max array's max value
@@ -999,7 +1097,7 @@ public class ArrayUtils {
     }
 
     /**
-     * Scales a real array to {@code [0 - maxScale]}.
+     * Scales a real array to {@code [0, maxScale]}.
      *
      * @param a array
      * @param max array's max value
@@ -1027,7 +1125,7 @@ public class ArrayUtils {
     }
 
     /**
-     * Scales a real array to {@code [0 - maxScale]}. Array's max and min values
+     * Scales a real array to {@code [0, maxScale]}. Array's max and min values
      * are found using {@link #max(float[][])} and {@link #min(float[][])}.
      *
      * @param a array
@@ -1042,7 +1140,7 @@ public class ArrayUtils {
     }
 
     /**
-     * Scales a real array to {@code [0 - maxScale]}. Array's max and min values
+     * Scales a real array to {@code [0, maxScale]}. Array's max and min values
      * are found using {@link #max(double[][])} and {@link #min(double[][])}.
      *
      * @param a array
@@ -1057,7 +1155,7 @@ public class ArrayUtils {
     }
 
     /**
-     * Scales a real array to {@code [0 - maxScale]} leaving the result in
+     * Scales a real array to {@code [0, maxScale]} leaving the result in
      * {@code a}.
      *
      * @param a array
@@ -1082,7 +1180,7 @@ public class ArrayUtils {
     }
 
     /**
-     * Scales a real array to {@code [0 - maxScale]} leaving the result in
+     * Scales a real array to {@code [0, maxScale]} leaving the result in
      * {@code a}.
      *
      * @param a array
@@ -1107,7 +1205,7 @@ public class ArrayUtils {
     }
 
     /**
-     * Scales a real array to {@code [0 - maxScale]} leaving the result in
+     * Scales a real array to {@code [0, maxScale]} leaving the result in
      * {@code a}. Array's max and min values are found using
      * {@link #max(float[][])} and {@link #min(float[][])}.
      *
@@ -1122,7 +1220,7 @@ public class ArrayUtils {
     }
 
     /**
-     * Scales a real array to {@code [0 - maxScale]} leaving the result in
+     * Scales a real array to {@code [0, maxScale]} leaving the result in
      * {@code a}. Array's max and min values are found using
      * {@link #max(double[][])} and {@link #min(double[][])}.
      *
@@ -1134,5 +1232,93 @@ public class ArrayUtils {
         double min = min(a);
 
         scale2(a, max, min, maxScale);
+    }
+
+    /**
+     * Converts a 1D array into a 2D array leaving the result in {@code b}. It
+     * is assumed that the information on the 1D array is distributed as the
+     * rows of the 2D array in sequence.
+     *
+     * @param M number of data points in x direction
+     * @param N number of data points in y direction
+     * @param a 1D array
+     * @param b 2D array
+     */
+    public static void vectorToMatrixArray(int M, int N, float[] a, float[][] b) {
+        checkDimension(b);
+
+        if (a.length == 0 || a.length != (M * N) || b.length != M || b[0].length != N) {
+            throw new IllegalArgumentException("The number of data points in both arrays must be equal and different from zero.");
+        }
+
+        for (int i = 0; i < M; i++) {
+            System.arraycopy(a, N * i, b[i], 0, N);
+        }
+    }
+
+    /**
+     * Converts a 1D array into a 2D array leaving the result in {@code b}. It
+     * is assumed that the information on the 1D array is distributed as the
+     * rows of the 2D array in sequence.
+     *
+     * @param M number of data points in x direction
+     * @param N number of data points in y direction
+     * @param a 1D array
+     * @param b 2D array
+     */
+    public static void vectorToMatrixArray(int M, int N, double[] a, double[][] b) {
+        checkDimension(b);
+
+        if (a.length == 0 || a.length != (M * N) || b.length != M || b[0].length != N) {
+            throw new IllegalArgumentException("The number of data points in both arrays must be equal and different from zero.");
+        }
+
+        for (int i = 0; i < M; i++) {
+            System.arraycopy(a, N * i, b[i], 0, N);
+        }
+    }
+
+    /**
+     * Converts a 2D array into a 1D array leaving the result in {@code b}. The
+     * information on the 1D array is distributed as the rows of the 2D array in
+     * sequence.
+     *
+     * @param M number of data points in x direction
+     * @param N number of data points in y direction
+     * @param a 2D array
+     * @param b 1D array
+     */
+    public static void matrixToVectorArray(int M, int N, float[][] a, float[] b) {
+        checkDimension(a);
+
+        if (a.length != M || a[0].length != N || b.length == 0 || b.length != (M * N)) {
+            throw new IllegalArgumentException("The number of data points in both arrays must be equal and different from zero.");
+        }
+
+        for (int i = 0; i < M; i++) {
+            System.arraycopy(a[i], 0, b, N * i, N);
+        }
+    }
+
+    /**
+     * Converts a 2D array into a 1D array leaving the result in {@code b}. The
+     * information on the 1D array is distributed as the rows of the 2D array in
+     * sequence.
+     *
+     * @param M number of data points in x direction
+     * @param N number of data points in y direction
+     * @param a 2D array
+     * @param b 1D array
+     */
+    public static void matrixToVectorArray(int M, int N, double[][] a, double[] b) {
+        checkDimension(a);
+
+        if (a.length != M || a[0].length != N || b.length == 0 || b.length != (M * N)) {
+            throw new IllegalArgumentException("The number of data points in both arrays must be equal and different from zero.");
+        }
+
+        for (int i = 0; i < M; i++) {
+            System.arraycopy(a[i], 0, b, N * i, N);
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Universidad Nacional de Colombia
+ * Copyright 2016 Universidad Nacional de Colombia
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,13 @@
 package unal.od.jdiffraction.cpu;
 
 /**
- *
+ * Abstract class for CPU diffraction calculation with single precision.
+ * 
  * @author Pablo Piedrahita-Quintero (jppiedrahitaq@unal.edu.co)
+ * @author Carlos Trujillo (catrujila@unal.edu.co)
  * @author Jorge Garcia-Sucerquia (jigarcia@unal.edu.co)
  *
- * @since JDiffraction 1.0
+ * @since JDiffraction 1.2
  */
 public abstract class FloatPropagator {
 
@@ -35,7 +37,6 @@ public abstract class FloatPropagator {
      * }
      *
      * @param field The complex field to diffract.
-     * @since JDiffraction 1.0
      */
     public abstract void diffract(float[][] field);
 }

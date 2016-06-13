@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Universidad Nacional de Colombia
+ * Copyright 2016 Universidad Nacional de Colombia
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,13 @@
 package unal.od.jdiffraction.cpu;
 
 /**
- *
- * @author Pablo Piedrahita-Quintero (jppiedrahitaq@unal.edu.co)
- * @author Jorge Garcia-Sucerquia (jigarcia@unal.edu.co)
+ * Abstract class for CPU diffraction calculation with double precision.
  * 
- * @since JDiffraction 1.0
+ * @author Pablo Piedrahita-Quintero (jppiedrahitaq@unal.edu.co)
+ * @author Carlos Trujillo (catrujila@unal.edu.co)
+ * @author Jorge Garcia-Sucerquia (jigarcia@unal.edu.co)
+ *
+ * @since JDiffraction 1.2
  */
 public abstract class DoublePropagator {
 
