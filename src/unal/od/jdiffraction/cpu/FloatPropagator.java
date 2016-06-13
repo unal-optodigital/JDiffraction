@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Universidad Nacional de Colombia
+ * Copyright 2015 Universidad Nacional de Colombia
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package unal.od.jdiffraction.prop;
+package unal.od.jdiffraction.cpu;
 
 /**
  *
  * @author Pablo Piedrahita-Quintero (jppiedrahitaq@unal.edu.co)
  * @author Jorge Garcia-Sucerquia (jigarcia@unal.edu.co)
+ *
+ * @since JDiffraction 1.0
  */
-public abstract class DoublePropagator {
-    
+public abstract class FloatPropagator {
+
     /**
+     * Performs numerical diffraction of the complex data in <code>field</code>,
+     * leaving the result in <code>field</code>. The physical layout of the
+     * complex data must be the same as in JTransforms:
+     * <p>
+     * {@code
+     * field[i][2 * j] = Re[i][j],
+     * field[i][2 * j + 1] = Im[i][j]; 0 &lt;= i &lt; M, 0 &lt;= j &lt; N
+     * }
      *
      * @param field The complex field to diffract.
+     * @since JDiffraction 1.0
      */
-    public abstract void diffract(double[][] field);
+    public abstract void diffract(float[][] field);
 }
