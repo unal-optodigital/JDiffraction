@@ -87,6 +87,9 @@ public class FloatAngularSpectrum extends FloatPropagator {
                 kernelPhase = c1 + j2 * j2 * dfySq;
                 kernelPhase *= lambdaSq;
                 kernelPhase = 1 - kernelPhase;
+                if (kernelPhase < 0) {
+                    kernelPhase = 0;
+                }
                 kernelPhase = (float) Math.sqrt(kernelPhase);
                 kernelPhase *= kernelFactor;
 
@@ -108,6 +111,9 @@ public class FloatAngularSpectrum extends FloatPropagator {
                 kernelPhase = c1 + j2 * j2 * dfySq;
                 kernelPhase *= lambdaSq;
                 kernelPhase = 1 - kernelPhase;
+                if (kernelPhase < 0) {
+                    kernelPhase = 0;
+                }
                 kernelPhase = (float) Math.sqrt(kernelPhase);
                 kernelPhase *= kernelFactor;
 
@@ -127,6 +133,9 @@ public class FloatAngularSpectrum extends FloatPropagator {
                 kernelPhase = c1 + i2 * i2 * dfxSq;
                 kernelPhase *= lambdaSq;
                 kernelPhase = 1 - kernelPhase;
+                if (kernelPhase < 0) {
+                    kernelPhase = 0;
+                }
                 kernelPhase = (float) Math.sqrt(kernelPhase);
                 kernelPhase *= kernelFactor;
 
@@ -144,6 +153,9 @@ public class FloatAngularSpectrum extends FloatPropagator {
             kernelPhase = i2 * i2 * dfxSq + j2 * j2 * dfySq;
             kernelPhase *= lambdaSq;
             kernelPhase = 1 - kernelPhase;
+            if (kernelPhase < 0) {
+                    kernelPhase = 0;
+                }
             kernelPhase = (float) Math.sqrt(kernelPhase);
             kernelPhase *= kernelFactor;
 
